@@ -1,0 +1,1 @@
+This code allows to parse .gif/.png/.jpg files from board in Pinterest
