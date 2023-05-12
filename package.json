@@ -1,0 +1,23 @@
+{
+  "name": "pinterest-parser",
+  "version": "1.0.0",
+  "description": "Pinterest board parsing",
+  "main": "index.js",
+  "scripts": {
+    "serve": "nodemon src/index.js",
+    "start": "node src/index.js",
+    "test": "node tests/example.spec.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.4.0",
+    "cheerio": "^1.0.0-rc.12",
+    "nodemon": "^2.0.22",
+    "playwright": "^1.33.0",
+    "puppeteer": "^20.2.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.33.0"
+  }
+}
