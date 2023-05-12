@@ -2,7 +2,7 @@ const playwright = require("playwright");
 const https = require("https");
 const fs = require("fs");
 
-const pageWithFiles = "https://ru.pinterest.com/miraihancock/рисунки/"; // * Insert a link of a board to parse
+const pageWithFiles = ""; // * Insert a link of a board to parse
 const reliablePath = "result/"; // * Configure result path
 let downloadAmount = 0; // * Configure amoutn of downloading pins (0 - all pins with additionals)
 
