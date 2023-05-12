@@ -1,1 +1,1 @@
-This code allows to parse .gif/.png/.jpg files from board in Pinterest
+This code allows to download .gif/.png/.jpg files from boards in Pinterest
