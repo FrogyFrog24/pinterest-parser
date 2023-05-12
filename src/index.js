@@ -3,33 +3,39 @@ const https = require("https");
 const fs = require("fs");
 const { log } = require("console");
 
-const pageWithFiles =
-	"https://ru.pinterest.com/Fatum9999/karakai-jouzu-no-takagi-san/";
-const reliablePath = "result/";
-let downloadAmount = 0;
+const pageWithFiles = ""; // Insert a link of a board for parse
+const reliablePath = "result/"; // Config result path
+let downloadAmount = 0; // Configure amoutn of downloading pins (0 - all pins)
 
 (async () => {
 	const browser = await playwright["chromium"].launch({ headless: true });
 	const context = await browser.newContext({ acceptDownloads: true });
 	const page = await context.newPage();
 	await page.goto(pageWithFiles);
+
 	downloadAmount !== 0 ? (downloadAmount += await page.$("h2")) : null;
+
 	let scrList = [];
 	for (let i = 0; i < 1000; i += 1) {
 		scrList.push(...(await scan(page, i)));
 	}
+
 	let cleanedSrcList = clean(scrList);
 	cleanedSrcList = getOriginals(cleanedSrcList);
+
 	const txt = fs.createWriteStream(reliablePath + "href-list.txt");
 	cleanedSrcList.map((el) => txt.write(el + `\n`));
+
 	await download(cleanedSrcList, downloadAmount);
 	await browser.close();
 })();
 
+// Remove duplications from href array
 const clean = (arr) => {
 	return [...new Set(arr)];
 };
 
+// Parse pins' srcs and scroll down
 const scan = async (page, i) => {
 	await page.mouse.wheel(0, i * 2000);
 	let srcList = await page.$$eval(
@@ -39,10 +45,14 @@ const scan = async (page, i) => {
 	return srcList;
 };
 
+// Get origin resolution
 const getOriginals = (srcList) => {
 	return srcList.map((el) => el.replace("236x", "originals"));
 };
 
+// Download pins
+// * In cases of errors with files' type here are some hadlers
+// * Looks awful, but it works :)
 const download = async (srcList, downloadAmount) => {
 	for (let j = 0; j < srcList.length; j++) {
 		if (downloadAmount && j === downloadAmount - 1) break;
