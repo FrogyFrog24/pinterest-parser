@@ -3,9 +3,15 @@ const https = require("https");
 const fs = require("fs");
 const { log } = require("console");
 
-const pageWithFiles = ""; // Insert a link of a board for parse
+const pageWithFiles = "https://ru.pinterest.com/miraihancock/pins/"; // Insert a link of a board for parse
 const reliablePath = "result/"; // Config result path
 let downloadAmount = 0; // Configure amoutn of downloading pins (0 - all pins)
+
+// To parse all pins, you need to choose the number of repetitions of the scroll and its step
+// Those settings allow to parse up to 900 pins, in some cases code won't get all files, play with values to get best result
+const scrollIterations = 1000;
+const scrollIterationsStep = 1;
+const scrollStep = 1000;
 
 (async () => {
 	const browser = await playwright["chromium"].launch({ headless: true });
@@ -16,7 +22,7 @@ let downloadAmount = 0; // Configure amoutn of downloading pins (0 - all pins)
 	downloadAmount !== 0 ? (downloadAmount += await page.$("h2")) : null;
 
 	let scrList = [];
-	for (let i = 0; i < 1000; i += 1) {
+	for (let i = 0; i < scrollIterations; i += scrollIterationsStep) {
 		scrList.push(...(await scan(page, i)));
 	}
 
@@ -37,7 +43,7 @@ const clean = (arr) => {
 
 // Parse pins' srcs and scroll down
 const scan = async (page, i) => {
-	await page.mouse.wheel(0, i * 2000);
+	await page.mouse.wheel(0, i * scrollStep);
 	let srcList = await page.$$eval(
 		"img:not([src*='75x75']):not([src*='70x'])",
 		(el) => el.map((el) => el.src)
